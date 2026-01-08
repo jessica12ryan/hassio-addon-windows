@@ -3,16 +3,16 @@
   "slug": "windows"
   "description": "Run lightweight Windows in Docker with browser-based access"
   "version": "1.0.0"
-  "startup": services
+  "startup": "services"
   "boot": auto
   "ingress": true
   "ingress_port": 80
-  "panel_icon": mdi:microsoft-windows
+  "panel_icon": "mdi:microsoft-windows"
   "host_network": false
   "ports":
-    6080/tcp: null
+    "6080/tcp": null
   "options":
-    custom_port: 6080
+    "custom_port": 6080
   "schema":
-    custom_port: port
+    "custom_port": port
 }
