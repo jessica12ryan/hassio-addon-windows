@@ -1,5 +1,6 @@
 {
   "name": "Windows Add-On",
   "url": "https://github.com/jessica12ryan/hassio-addon-windows",
+  "version": "1.0",
   "maintainer": "HomeSync CB <jessica12ryan@gmail.com>"
 }
