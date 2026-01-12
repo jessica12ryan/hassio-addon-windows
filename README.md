@@ -1,18 +1,4 @@
-# Windows Add-on for Home Assistant
-
-This add-on allows you to run a lightweight Windows environment inside Home Assistant using [Dockur Windows](https://github.com/dockur/windows) with noVNC access.
-
-## Features
-
-- Windows-in-Docker with QEMU
-- Web-based access via Home Assistant Ingress (noVNC)
-- Optional external port exposure
-
-## Requirements
-
-- AMD64 Based System
-- Home Assistant Operating System
-- Atleast 15GB Free Space
+# HomeSync Add-Ons for Home Assistant
 
 ## Installation
 
@@ -20,31 +6,17 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 
 If you want to do add the repository manually, please follow the procedure highlighted in the [Home Assistant website](https://home-assistant.io/hassio/installing_third_party_addons). Use the following URL to add this repository: https://github.com/jessica12ryan/homesync-addons
 
-Once the repository is added, select the addon from the addon store, and then click install. The install wheel will spin for about 15-20 minutes. Stay on this page as the install is about 15GB and takes some time to download and install.
+## Add-Ons
 
-## Usage
+&#10003; ![image](https://api.iconify.design/mdi/file-search.svg) [Windows](addon-windows/) : Run Windows 11 within Home Assistant using Docker and noVNC
 
-- Open from the Home Assistant Add-on panel
-- Or access externally at `http://<HA-IP>:<port>/vnc.html` (if ingress is disabled)
-
-## Configuration
-
-```yaml
-custom_port: 6080
-```
-
-## Troubleshooting
-
-- Ensure VT-x (Virtualization) is enabled in the BIOS
-- Ensure that you are using an AMD64 based system
-- ARCH64 based systems are not supported (e.g. raspberry pi)
-- If running HAOS inside Proxmox, ensure CPU is set to Host, and the AES flag is ON
-
-![Supports amd64 Architecture][amd64-shield]
-![Supports aarch64 Architecture][aarch64-shield]
+&emsp;&emsp;![Version](https://img.shields.io/badge/dynamic/yaml?label=Version&query=%24.version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddons-windows%2Fconfig.yaml)
+![Update](https://img.shields.io/badge/dynamic/json?label=Updated&query=%24.last_update&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-windows%2Fupdater.json)
+![aarch64no][aarch64no-badge]
+![amd64][amd64-badge]
 
 
-[aarch64-shield]: https://img.shields.io/badge/aarch64-no-red.svg
-[amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
+[aarch64no-badge]: https://img.shields.io/badge/aarch64-no-red.svg
+[amd64-badge]: https://img.shields.io/badge/amd64-yes-green.svg
 [repository-badge]: https://img.shields.io/badge/Add%20repository%20to%20my-Home%20Assistant-41BDF5?logo=home-assistant&style=for-the-badge
 [repository-url]: https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fjessica12ryan%2Fhomesync-addons
