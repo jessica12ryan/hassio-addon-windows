@@ -13,6 +13,9 @@ host_network: false
 host_ipc: true
 privileged:
   - SYS_ADMIN
+  - NET_ADMIN
+  - SYS_RAWIO
+full_access: true
 devices:
   - /dev/kvm:rmw
 map:
