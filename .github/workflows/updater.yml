@@ -1,0 +1,42 @@
+name: Generate Updater Metadata
+
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'addon-windows/config.yaml'  # Trigger only when the addon config changes
+
+jobs:
+  update-json:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write  # Allows the bot to push the new file
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v4
+
+      - name: Generate updater.json
+        run: |
+          # Extract the version from your config.yaml using grep/sed
+          VERSION=$(grep '^version:' addon-windows/config.yaml | awk '{print $2}' | tr -d '"')
+          DATE=$(date +'%d-%m-%Y')
+          
+          # Create the JSON structure
+          cat <<EOF > addon-windows/updater.json
+          {
+            "github_beta": "false",
+            "last_update": "$DATE",
+            "repository": "${{ github.repository }}",
+            "slug": "windows",
+            "source": "github",
+            "upstream_repo": "dockur/windows",
+            "upstream_version": "$VERSION"
+          }
+          EOF
+
+      - name: Commit and Push changes
+        uses: stefanzweifel/git-auto-commit-action@v5
+        with:
+          commit_message: "chore: update updater.json metadata"
+          file_pattern: 'addon-windows/updater.json'
