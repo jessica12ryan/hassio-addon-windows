@@ -38,6 +38,7 @@ custom_port: 6080
 - Ensure VT-x (Virtualization) is enabled in the BIOS
 - Ensure that you are using an AMD64 based system
 - ARCH64 based systems are not supported (e.g. raspberry pi)
+- If running HAOS inside Proxmox, ensure CPU is set to Host, and the AES flag is ON
 
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports aarch64 Architecture][aarch64-shield]
