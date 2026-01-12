@@ -1,10 +1,11 @@
 name: "Windows"
-slug: "windows"
 description: "Run lightweight Windows in Docker with browser-based access"
-version: "0.5.0"
+version: "0.6.0"
+slug: "windows"
 arch:
   - amd64
 startup: "services"
+panel: true
 boot: "auto"
 ingress: true
 ingress_port: 80
@@ -18,8 +19,6 @@ privileged:
   - SYS_PTRACE
   - DAC_READ_SEARCH
 full_access: true
-devices:
-  - /dev/kvm:rmw
 map:
   - config:rw
 ports:
