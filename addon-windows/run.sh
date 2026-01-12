@@ -2,9 +2,8 @@
 set -e
 
 # --- Configuration ---
-# These env vars are used by the dockur/windows /start.sh script
-export VERSION="tiny11"      # Using 'tiny11' is much faster for Home Assistant
-export RAM_SIZE="4G"         # Adjust based on your host hardware
+export VERSION="tiny11"
+export RAM_SIZE="4G"
 export CPU_CORES="2"
 export DISK_SIZE="32G"
 export STORAGE="/config/windows_data"
@@ -15,17 +14,27 @@ mkdir -p "$STORAGE"
 # --- Start Services ---
 
 echo "[Info] Starting Windows VM in background..."
-# We run the original entrypoint in the background
-/start.sh &
+
+# FIX: The actual path in the dockur/windows image is /run/start.sh
+if [ -f /run/start.sh ]; then
+    /run/start.sh &
+else
+    echo "[Error] Could not find /run/start.sh. Checking alternative paths..."
+    # Fallback to search if the path changed in a newer version
+    $(find / -name "start.sh" -executable -print -quit) &
+fi
 
 echo "[Info] Starting noVNC proxy on port 6080..."
-# Wait for the VNC server (port 5900) to be ready before proxying
-until nc -z localhost 5900; do
-  echo "[Wait] Waiting for Windows VNC server to start..."
-  sleep 2
+
+# Wait for the VNC server (port 5900) to be ready
+# Note: Using '127.0.0.1' is often more reliable than 'localhost' in Docker
+until nc -z 127.0.0.1 5900; do
+  echo "[Wait] Waiting for Windows VNC server to start (this can take 5+ mins)..."
+  sleep 5
 done
 
-/opt/novnc/utils/novnc_proxy --vnc localhost:5900 --listen 6080 &
+echo "[Info] VNC Server detected! Starting proxy..."
+/opt/novnc/utils/novnc_proxy --vnc 127.0.0.1:5900 --listen 6080 &
 
 echo "[Info] Starting Nginx for Ingress..."
 nginx -g "daemon off;"
