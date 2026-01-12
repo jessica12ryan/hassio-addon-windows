@@ -27,6 +27,7 @@ ports:
 options:
   ram_size: "4G"
   version: "tiny11"
+  vga: "std"
 schema:
   ram_size: str
   version: str
