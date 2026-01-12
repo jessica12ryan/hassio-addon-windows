@@ -1,39 +1,37 @@
 #!/bin/bash
 set -e
 
-# --- Configuration ---
-export VERSION="tiny11"
-export RAM_SIZE="4G"
-export CPU_CORES="2"
-export DISK_SIZE="32G"
+# Configuration from environment or defaults
+export VERSION=${version:-"tiny11"}
+export RAM_SIZE=${ram_size:-"4G"}
 export STORAGE="/config/windows_data"
 
 echo "[Info] Ensuring storage directory exists at $STORAGE"
 mkdir -p "$STORAGE"
 
-# --- Start Services ---
-echo "[Info] Starting Windows VM in background..."
+echo "[Info] Starting Windows VM ($VERSION) with $RAM_SIZE RAM..."
 
-# We use '.' (dot) to source the script instead of executing it directly.
-# This often bypasses the 'return' error in these specific base images.
-if [ -f /run/start.sh ]; then
-    . /run/start.sh &
-else
-    echo "[Error] Could not find /run/start.sh."
+# Start the Windows engine in the background
+# We use 'bash' to run it to prevent 'return' errors from crashing the addon
+bash /run/start.sh &
+
+echo "[Info] Waiting for Windows to initialize..."
+
+# Monitor port 5900 (The internal Windows VNC port)
+# This loop will run until the VM is actually ready
+while ! (echo > /dev/tcp/127.0.0.1/5900) >/dev/null 2>&1; do
+  echo "[Wait] Windows is still booting or downloading ISO. This can take 10+ minutes..."
+  
+  # Check if the process died
+  if ! pgrep -f "qemu" > /dev/null; then
+    echo "[Error] The Windows process crashed. Check logs for KVM or RAM errors."
     exit 1
-fi
-
-echo "[Info] Starting noVNC proxy on port 6080..."
-
-# Wait for the VNC server (port 5900) to be ready
-# Note: Using '127.0.0.1' is often more reliable than 'localhost' in Docker
-until nc -z 127.0.0.1 5900; do
-  echo "[Wait] Waiting for Windows VNC server to start (this can take 5+ mins)..."
-  sleep 5
+  fi
+  
+  sleep 10
 done
 
-echo "[Info] VNC Server detected! Starting proxy..."
-/opt/novnc/utils/novnc_proxy --vnc 127.0.0.1:5900 --listen 6080 &
+echo "[Success] Windows VNC is active!"
+echo "[Info] Starting Nginx Proxy for Ingress and Port 6080..."
 
-echo "[Info] Starting Nginx for Ingress..."
 nginx -g "daemon off;"
