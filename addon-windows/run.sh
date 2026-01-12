@@ -5,17 +5,21 @@ nginx -g "daemon off;" &
 
 echo "[Info] Configuring Environment for Emulation..."
 export STORAGE="/config/windows_data"
-export KVM="off"  # Force software emulation
-export VERSION="tiny11"
-export RAM_SIZE="4G"
+export KVM="off"              # Hardware acceleration disabled
+export VERSION="tiny11"       # Lightweight Windows 11
+export RAM_SIZE="4G"          # Minimum recommended for Tiny11
+export CPU_CORES="2"          # Don't over-provision cores in emulation
+
+# These flags help QEMU run slightly faster when emulating
+export ARGUMENTS="-cpu qemu64,+ssse3,+sse4.1,+sse4.2 -vga std"
 
 mkdir -p "$STORAGE"
 
 # Patch the internal script to prevent crashes
 sed -i 's/return/exit/g' /run/start.sh
 
-echo "[Warning] Running WITHOUT KVM. Startup will be very slow (30-60 mins)."
-echo "[Info] Launching Windows Engine..."
+echo "[Warning] Running WITHOUT KVM. This will be slow!"
+echo "[Info] Handing over to Windows Engine..."
 
-# Run start.sh directly. Since KVM is off, it will use QEMU emulation.
+# Start the engine
 /run/start.sh
