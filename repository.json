@@ -1,5 +1,12 @@
 {
-  "name": "Windows Add-On",
-  "url": "https://github.com/jessica12ryan/hassio-addon-windows",
-  "maintainer": "HomeSync CB <jessica12ryan@gmail.com>"
+  "windows": {
+    "name": "Windows Add-On",
+    "url": "https://github.com/jessica12ryan/hassio-addon-windows",
+    "maintainer": "HomeSync CB <jessica12ryan@gmail.com>",
+    "version": "1.0.0",
+    "slug": "windows",
+    "description": "Run Windows in Docker with noVNC",
+    "url": "https://github.com/jessica12ryan/hassio-addon-windows",
+    "arch": ["amd64"],
+  }
 }
