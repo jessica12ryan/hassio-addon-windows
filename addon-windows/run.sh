@@ -6,53 +6,32 @@ export RAM_SIZE="4G"
 export STORAGE="/config/windows_data"
 mkdir -p "$STORAGE"
 
+echo "[Info] Patching internal startup script..."
+# This replaces 'return' with 'exit' in the internal script so it can run standalone
+sed -i 's/return/exit/g' /run/start.sh
+
 echo "[Info] Starting Windows VM ($VERSION)..."
 
-# Function to handle the internal sourcing
-launch_vm() {
-    . /run/start.sh
-}
+# Run the script directly in the background
+/run/start.sh > /config/windows_data/boot.log 2>&1 &
 
-# Run in background and capture logs
-launch_vm > /config/windows_data/boot.log 2>&1 &
+echo "[Info] Monitoring boot log for activity..."
 
-echo "[Info] Monitoring startup and download progress..."
-
-# Wait for the log to actually be created
-sleep 5
-
-# This loop parses the boot.log for progress strings
+# Wait loop with log scraping
 while ! (echo > /dev/tcp/127.0.0.1/5900) >/dev/null 2>&1; do
   
-  # Extract the last line containing a percentage (common for wget/curl)
+  # Print the last 2 lines of the actual boot log so we see real errors
+  LAST_LINE=$(tail -n 1 /config/windows_data/boot.log)
+  echo "[Internal Log] $LAST_LINE"
+  
+  # Check for common download percentages
   PROGRESS=$(grep -o '[0-9]\{1,3\}%' /config/windows_data/boot.log | tail -1)
-  
-  # Check for specific status messages
-  if grep -q "Downloading" /config/windows_data/boot.log; then
-    STATUS="Downloading ISO: ${PROGRESS:-0%}"
-  elif grep -q "Extracting" /config/windows_data/boot.log; then
-    STATUS="Extracting ISO image..."
-  elif grep -q "Creating" /config/windows_data/boot.log; then
-    STATUS="Creating Virtual Disk..."
-  else
-    STATUS="Initializing Windows Engine..."
+  if [ ! -z "$PROGRESS" ]; then
+    echo "[Progress] Download is at $PROGRESS"
   fi
 
-  echo "[Progress] $STATUS"
-  
-  # Check if the process died
-  if ! pgrep -f "qemu" > /dev/null && ! pgrep -f "wget" > /dev/null; then
-     # After about 2 minutes, if nothing is running, it's a real crash
-     if [ $(stat -c %Y /config/windows_data/boot.log) -lt $(( $(date +%s) - 60 )) ]; then
-        echo "[Error] Startup process seems to have stalled. Checking last 5 lines of log:"
-        tail -n 5 /config/windows_data/boot.log
-        exit 1
-     fi
-  fi
-
-  sleep 20
+  sleep 15
 done
 
-echo "[Success] Windows VNC is active on port 5900!"
-echo "[Info] Starting Nginx proxy for Ingress..."
+echo "[Success] Windows VNC is active!"
 nginx -g "daemon off;"
