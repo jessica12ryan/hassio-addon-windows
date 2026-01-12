@@ -1,0 +1,9 @@
+{
+  "github_beta": "false",
+  "last_update": "12-01-2026",
+  "repository": "jessica12ryan/homesync-addons",
+  "slug": "windows",
+  "source": "github",
+  "upstream_repo": "dockur/windows",
+  "upstream_version": "0.3"
+}
