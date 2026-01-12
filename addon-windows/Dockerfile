@@ -12,6 +12,6 @@ COPY nginx.conf /etc/nginx/nginx.conf
 RUN chmod +x /run.sh
 
 USER root
-RUN usermod -a -G kvm,root root
+RUN usermod -a -G root root
 
 ENTRYPOINT ["/run.sh"]
