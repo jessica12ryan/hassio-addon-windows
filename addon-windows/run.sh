@@ -3,13 +3,19 @@
 echo "[Info] Starting Nginx for Ingress..."
 nginx -g "daemon off;" &
 
-echo "[Info] Patching environment..."
+echo "[Info] Configuring Environment for Emulation..."
 export STORAGE="/config/windows_data"
+export KVM="off"  # Force software emulation
+export VERSION="tiny11"
+export RAM_SIZE="4G"
+
 mkdir -p "$STORAGE"
 
-# This replaces 'return' with 'exit' just in case
+# Patch the internal script to prevent crashes
 sed -i 's/return/exit/g' /run/start.sh
 
-echo "[Info] Handing over control to Windows Engine..."
-# 'exec' replaces our script with theirs, making it the primary process (PID 1)
-exec /run/start.sh
+echo "[Warning] Running WITHOUT KVM. Startup will be very slow (30-60 mins)."
+echo "[Info] Launching Windows Engine..."
+
+# Run start.sh directly. Since KVM is off, it will use QEMU emulation.
+/run/start.sh
