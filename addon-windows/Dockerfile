@@ -8,5 +8,5 @@ COPY run.sh /run.sh
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN chmod +x /run.sh
 
-# We use the standard entrypoint so the image stays "happy"
+USER root
 ENTRYPOINT ["/run.sh"]
