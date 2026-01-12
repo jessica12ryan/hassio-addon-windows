@@ -1,5 +1,5 @@
 # Windows Add-on
 
-## 1.0
+## 0.2
 
-- First Release
+- Beta Testing
