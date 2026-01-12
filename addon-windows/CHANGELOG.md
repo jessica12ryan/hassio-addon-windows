@@ -4,13 +4,11 @@
 
 ## 0.4.2 (12-01-2026)
 
-- Updated addon to version 0.4.2
+- Updated to version 0.4.2
 
 ## 0.4.1 (12-01-2026)
 
 - Updated to version 0.4.1
-
-# Windows Add-on
 
 ## 0.2
 
