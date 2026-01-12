@@ -16,15 +16,19 @@ jobs:
       - name: Checkout Code
         uses: actions/checkout@v4
         with:
-          fetch-depth: 0 # Fetches all history so we can merge/rebase properly
+          fetch-depth: 0 # Required for rebase to work
 
       - name: Extract Metadata and Update Files
+        id: metadata
         run: |
+          # Extract version from config.yaml
           VERSION=$(grep '^version:' addon-windows/config.yaml | head -1 | awk '{print $2}' | tr -d '"')
           DATE=$(date +'%d-%m-%Y')
           REPO="${{ github.repository }}"
           
-          # Create updater.json
+          echo "VERSION=$VERSION" >> $GITHUB_ENV
+          
+          # 1. Create updater.json
           cat <<EOF > addon-windows/updater.json
           {
             "github_beta": "false",
@@ -37,19 +41,24 @@ jobs:
           }
           EOF
 
-          # Update CHANGELOG.md
+          # 2. Update CHANGELOG.md (prepend newest version)
           if ! grep -q "## $VERSION" addon-windows/CHANGELOG.md; then
             TEMP_CHANGELOG=$(mktemp)
-            echo -e "## $VERSION ($DATE)\n\n- Updated to version $VERSION\n$(cat addon-windows/CHANGELOG.md)" > "$TEMP_CHANGELOG"
+            echo -e "## $VERSION ($DATE)\n\n- Updated to version $VERSION\n\n$(cat addon-windows/CHANGELOG.md)" > "$TEMP_CHANGELOG"
             mv "$TEMP_CHANGELOG" addon-windows/CHANGELOG.md
           fi
 
-      # --- ADDED THIS STEP ---
-      - name: Pull latest changes
-        run: git pull origin main --rebase
+      - name: Sync with Remote
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # This command handles the 'unstaged changes' by stashing them automatically
+          git pull origin main --rebase --autostash
 
       - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update updater.json and CHANGELOG"
+          commit_message: "chore: update updater.json and CHANGELOG for v${{ env.VERSION }}"
           file_pattern: 'addon-windows/updater.json addon-windows/CHANGELOG.md'
+          # We manually synced, so we don't want the action to try a standard push if it's behind
+          disable_globbing: true
