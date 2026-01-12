@@ -11,6 +11,7 @@ ingress: true
 ingress_port: 80
 panel_icon: "mdi:microsoft-windows"
 host_network: false
+host_ipc: true
 privileged:
   - SYS_ADMIN
 devices:
