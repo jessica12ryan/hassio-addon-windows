@@ -20,6 +20,8 @@ map:
 ports:
   6080/tcp: 6080
 options:
-  custom_port: 6080
+  ram_size: "4G"
+  version: "tiny11"
 schema:
-  custom_port: port
+  ram_size: str
+  version: str
