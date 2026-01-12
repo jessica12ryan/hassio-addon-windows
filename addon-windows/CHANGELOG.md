@@ -1,3 +1,7 @@
+## 0.4.5 (12-01-2026)
+
+- Updated to version 0.4.5
+
 ## 0.4.4 (12-01-2026)
 
 - Updated to version 0.4.4
