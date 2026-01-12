@@ -1,7 +1,7 @@
 name: "Windows"
 slug: "windows"
 description: "Run lightweight Windows in Docker with browser-based access"
-version: "0.4.7"
+version: "0.4.8"
 arch:
   - amd64
 startup: "services"
@@ -26,5 +26,7 @@ ports:
   6080/tcp: 6080
 options:
   ram_size: "4G"
+  version: "tiny11"
 schema:
   ram_size: str
+  version: str
