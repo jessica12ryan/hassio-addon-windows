@@ -1,34 +1,26 @@
 #!/bin/bash
 
-# Configuration
+# Ensure we use the exact version name the script expects
 export VERSION="tiny11"
 export RAM_SIZE="4G"
 export STORAGE="/config/windows_data"
+
 mkdir -p "$STORAGE"
 
-echo "[Info] Starting Windows VM ($VERSION)..."
+echo "[Info] Starting Windows VM..."
 
-# --- THE CRITICAL CHANGE ---
-# Instead of running start.sh in the background where it's silent,
-# we run it and pipe the output to a log file we can watch.
+# Launch the internal script and log everything to a file
+# This way, if it hangs, you can read /config/windows_data/boot.log
 /run/start.sh > /config/windows_data/boot.log 2>&1 &
 
-echo "[Info] Monitoring internal boot logs..."
-
-# This 'tail' command will show you the ACTUAL download progress 
-# and any errors in your Home Assistant console.
+# Show the log in the HA console so you can see the download progress
 tail -f /config/windows_data/boot.log &
 
-# Wait loop
+# Wait for the VNC port (5900) to open
 while ! (echo > /dev/tcp/127.0.0.1/5900) >/dev/null 2>&1; do
-  echo "[Wait] Still waiting for VNC... check the 'tail' output above for progress."
-  
-  # Check if Disk space is an issue
-  DF_CHECK=$(df -h /config | tail -1 | awk '{print $4}')
-  echo "[Debug] Free space left: $DF_CHECK"
-  
+  echo "[Wait] Windows is initializing. Check the logs above for download status..."
   sleep 30
 done
 
-echo "[Success] Windows VNC is active!"
+echo "[Success] Windows is ready!"
 nginx -g "daemon off;"
