@@ -11,4 +11,7 @@ COPY nginx.conf /etc/nginx/nginx.conf
 # Fix permissions
 RUN chmod +x /run.sh
 
+USER root
+RUN usermod -a -G kvm,root root
+
 ENTRYPOINT ["/run.sh"]
