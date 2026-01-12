@@ -8,11 +8,19 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 - Web-based access via Home Assistant Ingress (noVNC)
 - Optional external port exposure
 
+## Requirements
+
+- AMD64 Based System
+- Home Assistant Operating System
+- Atleast 15GB Free Space
+
 ## Installation
 
 [![Add repository to Home Assistant][repository-badge]][repository-url]
 
 If you want to do add the repository manually, please follow the procedure highlighted in the [Home Assistant website](https://home-assistant.io/hassio/installing_third_party_addons). Use the following URL to add this repository: https://github.com/jessica12ryan/hassio-addon-windows
+
+Once the repository is added, select the addon from the addon store, and then click install. The install wheel will spin for about 15-20 minutes. Stay on this page as the install is about 15GB and takes some time to download and install.
 
 ## Usage
 
