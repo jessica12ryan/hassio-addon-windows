@@ -1,15 +1,17 @@
 FROM ghcr.io/dockur/windows:latest
 
-# Use apt-get instead of apk for Ubuntu-based images
+# Set shell to bash for better error handling
+SHELL ["/bin/bash", "-o", "pipefail", "-c"]
+
+# Combine commands and clean up cache in one layer to keep the image size down
 RUN apt-get update && apt-get install -y --no-install-recommends \
     git \
     nginx \
     python3 \
     python3-pip \
     python3-websockify \
-    && git clone https://github.com/novnc/noVNC.git /opt/novnc \
-    && git clone https://github.com/novnc/websockify /opt/novnc/utils/websockify \
-    && chmod +x /opt/novnc/utils/novnc_proxy \
+    && git clone --depth 1 https://github.com/novnc/noVNC.git /opt/novnc \
+    && git clone --depth 1 https://github.com/novnc/websockify /opt/novnc/utils/websockify \
     && apt-get clean \
     && rm -rf /var/lib/apt/lists/*
 
@@ -17,6 +19,4 @@ COPY run.sh /run.sh
 COPY nginx.conf /etc/nginx/nginx.conf
 RUN chmod +x /run.sh
 
-# Important: This overrides the original Windows container startup.
-# Ensure your run.sh also starts the Windows VM, not just noVNC!
-CMD [ "/run.sh" ]
+ENTRYPOINT ["/run.sh"]
