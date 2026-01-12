@@ -12,16 +12,15 @@ echo "[Info] Ensuring storage directory exists at $STORAGE"
 mkdir -p "$STORAGE"
 
 # --- Start Services ---
-
 echo "[Info] Starting Windows VM in background..."
 
-# FIX: The actual path in the dockur/windows image is /run/start.sh
+# We use '.' (dot) to source the script instead of executing it directly.
+# This often bypasses the 'return' error in these specific base images.
 if [ -f /run/start.sh ]; then
-    /run/start.sh &
+    . /run/start.sh &
 else
-    echo "[Error] Could not find /run/start.sh. Checking alternative paths..."
-    # Fallback to search if the path changed in a newer version
-    $(find / -name "start.sh" -executable -print -quit) &
+    echo "[Error] Could not find /run/start.sh."
+    exit 1
 fi
 
 echo "[Info] Starting noVNC proxy on port 6080..."
