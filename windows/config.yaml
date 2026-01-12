@@ -13,6 +13,8 @@ host_network: false
 privileged: true
 devices:
   - /dev/kvm
+map:
+  - config:rw
 ports:
   6080/tcp: 6080
 options:
