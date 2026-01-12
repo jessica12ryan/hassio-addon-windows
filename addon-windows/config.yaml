@@ -1,6 +1,6 @@
 name: "Windows"
 description: "Run lightweight Windows in Docker with browser-based access"
-version: "0.6.0"
+version: "0.7.0"
 slug: "windows"
 arch:
   - amd64
