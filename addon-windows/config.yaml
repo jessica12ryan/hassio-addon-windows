@@ -23,10 +23,3 @@ map:
   - config:rw
 ports:
   6080/tcp: 6080
-options:
-  ram_size: "4G"
-  version: "tiny11"
-  vga: "std"
-schema:
-  ram_size: str
-  version: str
