@@ -1,33 +1,36 @@
-name: Generate Updater Metadata
+name: Update Addon Metadata
 
 on:
   push:
     branches:
       - main
     paths:
-      - 'addon-windows/config.yaml'  # Trigger only when the addon config changes
+      - 'addon-windows/config.yaml'
 
 jobs:
-  update-json:
+  update-metadata:
     runs-on: ubuntu-latest
     permissions:
-      contents: write  # Allows the bot to push the new file
+      contents: write
     steps:
       - name: Checkout Code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0 # Fetches full history for rebasing
 
-      - name: Generate updater.json
+      - name: Extract Metadata and Update Files
         run: |
-          # Extract the version from your config.yaml using grep/sed
-          VERSION=$(grep '^version:' addon-windows/config.yaml | awk '{print $2}' | tr -d '"')
+          # Extract version from config.yaml
+          VERSION=$(grep '^version:' addon-windows/config.yaml | head -1 | awk '{print $2}' | tr -d '"')
           DATE=$(date +'%d-%m-%Y')
+          REPO="${{ github.repository }}"
           
-          # Create the JSON structure
+          # 1. Create updater.json
           cat <<EOF > addon-windows/updater.json
           {
             "github_beta": "false",
             "last_update": "$DATE",
-            "repository": "${{ github.repository }}",
+            "repository": "$REPO",
             "slug": "windows",
             "source": "github",
             "upstream_repo": "dockur/windows",
@@ -35,8 +38,22 @@ jobs:
           }
           EOF
 
-      - name: Commit and Push changes
+          # 2. Update CHANGELOG.md (Prepends newest version to the top)
+          if ! grep -q "## $VERSION" addon-windows/CHANGELOG.md; then
+            TEMP_CHANGELOG=$(mktemp)
+            echo -e "## $VERSION ($DATE)\n\n- Updated addon to version $VERSION\n\n$(cat addon-windows/CHANGELOG.md)" > "$TEMP_CHANGELOG"
+            mv "$TEMP_CHANGELOG" addon-windows/CHANGELOG.md
+          fi
+
+      - name: Sync with Remote
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          # Autostash hides your new files, pulls changes, then puts files back
+          git pull origin main --rebase --autostash
+
+      - name: Commit and Push Changes
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
-          commit_message: "chore: update updater.json metadata"
-          file_pattern: 'addon-windows/updater.json'
+          commit_message: "chore: update updater.json and CHANGELOG"
+          file_pattern: 'addon-windows/updater.json addon-windows/CHANGELOG.md'
