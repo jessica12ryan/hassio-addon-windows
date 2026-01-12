@@ -25,9 +25,17 @@ If you want to do add the repository manually, please follow the procedure highl
 custom_port: 6080
 ```
 
-[repository-badge]: https://img.shields.io/badge/Add%20repository%20to%20my-Home%20Assistant-41BDF5?logo=home-assistant&style=for-the-badge
-[repository-url]: https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fjessica12ryan%2Fhassio-addon-windows
-
 ## Troubleshooting
 
 Ensure VT-x (Virtualization) is enabled in the BIOS
+Ensure that you are using an AMD64 based system
+ARCH64 based systems are not supported (e.g. raspberry pi)
+
+![Supports amd64 Architecture][amd64-shield]
+![Supports aarch64 Architecture][aarch64-shield]
+
+
+[aarch64-shield]: https://img.shields.io/badge/aarch64-no-red.svg
+[amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
+[repository-badge]: https://img.shields.io/badge/Add%20repository%20to%20my-Home%20Assistant-41BDF5?logo=home-assistant&style=for-the-badge
+[repository-url]: https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fjessica12ryan%2Fhassio-addon-windows
