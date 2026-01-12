@@ -2,6 +2,7 @@ name: "Windows"
 slug: "windows"
 description: "Run lightweight Windows in Docker with browser-based access"
 version: "1.0.0"
+image: "jessica12ryan/{arch}-addon-windows"
 arch:
   - amd64
 startup: "services"
