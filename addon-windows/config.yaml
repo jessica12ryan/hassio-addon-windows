@@ -14,7 +14,7 @@ host_network: false
 privileged:
   - SYS_ADMIN
 devices:
-  - /dev/kvm
+  - /dev/kvm:rmw
 map:
   - config:rw
 ports:
