@@ -35,9 +35,9 @@ custom_port: 6080
 
 ## Troubleshooting
 
-Ensure VT-x (Virtualization) is enabled in the BIOS
-Ensure that you are using an AMD64 based system
-ARCH64 based systems are not supported (e.g. raspberry pi)
+- Ensure VT-x (Virtualization) is enabled in the BIOS
+- Ensure that you are using an AMD64 based system
+- ARCH64 based systems are not supported (e.g. raspberry pi)
 
 ![Supports amd64 Architecture][amd64-shield]
 ![Supports aarch64 Architecture][aarch64-shield]
