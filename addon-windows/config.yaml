@@ -2,6 +2,7 @@ name: "Windows"
 description: "Run lightweight Windows in Docker with browser-based access"
 version: "1.0.0"
 slug: "addon-windows"
+url: "https://github.com/jessica12ryan/homesync-addons"
 
 arch:
   - amd64
