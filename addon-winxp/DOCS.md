@@ -1,0 +1,40 @@
+# Windows XP Add-on for Home Assistant
+
+This add-on allows you to run a Windows XP environment inside Home Assistant using [Dockur Windows](https://github.com/dockur/windows) with noVNC access.
+
+## Features
+
+- Windows-in-Docker with QEMU
+- Web-based access via Home Assistant Ingress (noVNC)
+
+## Requirements
+
+- AMD64 Based System
+- Home Assistant Operating System
+- 10GB Free Space (Dedicated)
+
+## Installation
+
+Open the addon and then click install. 
+It is recommended that you turn off protected mode before starting the addon.
+
+## Usage
+
+- Open from the Home Assistant Add-on panel
+- Or access externally at `http://<HA-IP>:8006/vnc.html` (if ingress is disabled)
+
+## Troubleshooting
+
+- Ensure VT-x (Virtualization) is enabled in the BIOS
+- Ensure that you are using an AMD64 based system
+- ARCH64 based systems are not supported (e.g. raspberry pi)
+- If running HAOS inside Proxmox, ensure CPU is set to Host, and the AES flag is ON
+
+![Supports amd64 Architecture][amd64-shield]
+![Supports aarch64 Architecture][aarch64-shield]
+
+
+[aarch64-shield]: https://img.shields.io/badge/aarch64-no-red.svg
+[amd64-shield]: https://img.shields.io/badge/amd64-yes-green.svg
+[repository-badge]: https://img.shields.io/badge/Add%20repository%20to%20my-Home%20Assistant-41BDF5?logo=home-assistant&style=for-the-badge
+[repository-url]: https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fjessica12ryan%2Fhomesync-addons

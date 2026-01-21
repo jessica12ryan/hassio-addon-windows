@@ -17,8 +17,15 @@ If you want to do add the repository manually, please follow the procedure highl
 
 &#10003; ![image](https://api.iconify.design/mdi/file-search.svg) [Windows 11](addon-win11/) : Run Windows 11 within Home Assistant using Docker and noVNC
 
-&emsp;&emsp;![Version](https://img.shields.io/badge/dynamic/yaml?label=Version&query=%24.upstream_version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-windows%2Fupdater.json)
-![Update](https://img.shields.io/badge/dynamic/json?label=Updated&query=%24.last_update&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-windows%2Fupdater.json)
+&emsp;&emsp;![Version](https://img.shields.io/badge/dynamic/yaml?label=Version&query=%24.upstream_version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-win11%2Fupdater.json)
+![Update](https://img.shields.io/badge/dynamic/json?label=Updated&query=%24.last_update&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-win11%2Fupdater.json)
+![aarch64no][aarch64no-badge]
+![amd64][amd64-badge]
+
+&#10003; ![image](https://api.iconify.design/mdi/file-search.svg) [Windows XP](addon-winxp/) : Run Windows XP within Home Assistant using Docker and noVNC
+
+&emsp;&emsp;![Version](https://img.shields.io/badge/dynamic/yaml?label=Version&query=%24.upstream_version&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-winxp%2Fupdater.json)
+![Update](https://img.shields.io/badge/dynamic/json?label=Updated&query=%24.last_update&url=https%3A%2F%2Fraw.githubusercontent.com%2Fjessica12ryan%2Fhomesync-addons%2Fmaster%2Faddon-winxp%2Fupdater.json)
 ![aarch64no][aarch64no-badge]
 ![amd64][amd64-badge]
 

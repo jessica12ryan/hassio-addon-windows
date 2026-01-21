@@ -1,0 +1,40 @@
+name: "Windows XP"
+description: "Run Windows XP in Docker with browser-based access"
+version: "1.0.0"
+slug: "addon-winxp"
+url: "https://github.com/jessica12ryan/homesync-addons"
+
+arch:
+  - amd64
+  
+startup: "services"
+panel: true
+boot: "auto"
+
+host_ipc: true
+
+full_access: true
+
+privileged:
+  - SYS_ADMIN
+  - NET_ADMIN
+  - SYS_RAWIO
+  - SYS_PTRACE
+  - DAC_READ_SEARCH
+
+map:
+  - config:rw
+
+ports:
+  8006/tcp: 8006
+
+ingress: true
+ingress_port: 8006
+panel_icon: "mdi:microsoft-windows"
+webui: "http://[HOST]:[PORT:8006]"
+
+environment:
+  KVM: "N"
+  DISK_SIZE: "10G"
+  VERSION: "xp"
+  LANGUAGE: "English"

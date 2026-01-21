@@ -1,0 +1,9 @@
+{
+  "github_beta": "false",
+  "last_update": "21-01-2026",
+  "repository": "jessica12ryan/homesync-addons",
+  "slug": "addon-winxp",
+  "source": "github",
+  "upstream_repo": "dockur/windows",
+  "upstream_version": "1.0.0"
+}
