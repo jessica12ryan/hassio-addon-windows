@@ -30,10 +30,7 @@ options:
   fpp_port: 80
 
 schema:
-  fpp_port:
-    description: "FPP web UI port"
-    type: integer
-    default: 80
+  fpp_port: port
 
 environment:
   FPP_PORT: "!secret fpp_port"
