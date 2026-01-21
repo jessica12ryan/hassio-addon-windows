@@ -1,0 +1,33 @@
+name: "FPP - Falcon Player"
+description: "Run lightweight Windows in Docker with browser-based access"
+version: "9.5"
+slug: "addon-fpp"
+url: "https://github.com"
+
+image: "falconchristmas/fpp:latest"
+
+arch:
+  - amd64
+  - aarch64
+  
+startup: "services"
+boot: "auto"
+
+ports:
+    - 8080/tcp: 8080
+    - 4048/udp: 4048
+    - 5568/udp: 5568
+    - 32320/udp: 32320
+    - 32322: 32322
+  
+host_network: true
+host_ipc: true
+privileged:
+  - SYS_ADMIN
+  - NET_ADMIN
+  - SYS_RAWIO
+  - SYS_PTRACE
+  - DAC_READ_SEARCH
+full_access: true
+map:
+  - config:rw
