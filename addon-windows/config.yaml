@@ -40,9 +40,9 @@ options:
 
 # Correct HA addon schema
 schema:
-  DISK_SIZE: string
-  VERSION: string
-  LANGUAGE: string
+  DISK_SIZE: list(16G,32G,64G)
+  VERSION: list(xp,7,10)
+  LANGUAGE: list(English,French)
 
 # Pass options to container
 environment:
