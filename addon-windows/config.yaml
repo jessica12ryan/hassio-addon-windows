@@ -40,7 +40,13 @@ options:
   LANGUAGE: "English"
 
 schema:
-  KVM: list(N|Y)
+  KVM: bool
   DISK_SIZE: list(16G|32G|64G|128G)
-  VERSION: list(xp|11)
+  VERSION: list(11|10|ltsc)
   LANGUAGE: list(English|French)
+
+environment:
+  KVM: "!KVM"
+  DISK_SIZE: "!DISK_SIZE"
+  VERSION: "!VERSION"
+  LANGUAGE: "!LANGUAGE"
