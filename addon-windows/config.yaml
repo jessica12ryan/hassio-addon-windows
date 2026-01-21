@@ -10,7 +10,6 @@ startup: "services"
 panel: true
 boot: "auto"
 
-host_network: true
 host_ipc: true
 
 full_access: true
@@ -24,6 +23,9 @@ privileged:
 
 map:
   - config:rw
+
+ports:
+  - "8006:8006/tcp"
 
 ingress: true
 ingress_port: 8006
