@@ -1,10 +1,10 @@
 name: "FPP - Falcon Player"
 description: "Falcon Player (FPP) is a lightweight, optimized, feature-rich sequence player."
-version: "1.0"
+version: "9.5.1"
 slug: "addon-fpp"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
-image: "falconchristmas/fpp:latest"
+image: "falconchristmas/fpp"
 
 arch:
   - amd64
