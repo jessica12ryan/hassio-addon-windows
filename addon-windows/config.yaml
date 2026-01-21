@@ -22,5 +22,8 @@ privileged:
 full_access: true
 map:
   - config:rw
+
+devices:
+  - /dev/kvm:/dev/kvm
 environment:
-  KVM: "N"
+  KVM: "${KVM:-Y}"
