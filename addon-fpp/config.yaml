@@ -18,10 +18,12 @@ host_network: true
 host_ipc: true
 
 full_access: true
+
 map:
   - config:rw
-  - media:rw
-  - share:rw
+  - /media/fpp:rw:/opt/fpp/media
+  - /media/fpp_sequences:rw:/opt/fpp/sequences
+  - /config/fpp_config:rw:/opt/fpp/config
 
 ingress: true
 ingress_port: 80
