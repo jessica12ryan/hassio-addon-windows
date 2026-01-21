@@ -1,8 +1,8 @@
 name: "FPP - Falcon Player"
-description: "Run lightweight Windows in Docker with browser-based access"
+description: "Falcon Player (FPP) is a lightweight, optimized, feature-rich sequence player."
 version: "9.5"
 slug: "addon-fpp"
-url: "https://github.com"
+url: "https://github.com/jessica12ryan/homesync-addons"
 
 image: "falconchristmas/fpp"
 
