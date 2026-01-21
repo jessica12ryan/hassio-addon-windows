@@ -7,6 +7,8 @@ RUN apt-get update && \
 COPY nginx.conf /etc/nginx/nginx.conf
 COPY ingress.conf /etc/nginx/conf.d/ingress.conf
 
-EXPOSE 8099
+# s6 service for nginx
+RUN mkdir -p /etc/services.d/nginx
 
-CMD service nginx start && /usr/bin/fppd
+COPY nginx-run /etc/services.d/nginx/run
+RUN chmod +x /etc/services.d/nginx/run
