@@ -20,9 +20,7 @@ host_ipc: true
 full_access: true
 
 map:
-  - /homeassistant/fpp/config:rw:/opt/fpp/config
-  - /homeassistant/fpp/logs:rw:/opt/fpp/logs
-  - /media/fpp:rw:/opt/fpp/media
+  - /media/fpp:rw:/data
 
 ingress: true
 ingress_port: 80
