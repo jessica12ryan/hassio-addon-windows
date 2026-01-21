@@ -22,12 +22,3 @@ full_access: true
 ingress: true
 ingress_port: 80
 panel_icon: mdi:led-strip-variant
-
-options:
-  fpp_data_path: "/config/fpp"
-
-schema:
-  fpp_data_path: str
-
-map:
-  - /config/fpp:rw:/home/fpp/media
