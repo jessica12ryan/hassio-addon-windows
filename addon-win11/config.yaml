@@ -1,7 +1,7 @@
 name: "Windows 11"
 description: "Run Windows 11 in Docker with browser-based access"
 version: "1.0.0"
-slug: "addon-windows"
+slug: "addon-win11"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
 arch:

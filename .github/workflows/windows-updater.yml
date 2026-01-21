@@ -5,7 +5,7 @@ on:
     branches:
       - main
     paths:
-      - 'addon-windows/config.yaml'
+      - 'addon-win11/config.yaml'
 
 jobs:
   update-metadata:
@@ -21,17 +21,17 @@ jobs:
       - name: Extract Metadata and Update Files
         run: |
           # Extract version from config.yaml
-          VERSION=$(grep '^version:' addon-windows/config.yaml | head -1 | awk '{print $2}' | tr -d '"')
+          VERSION=$(grep '^version:' addon-win11/config.yaml | head -1 | awk '{print $2}' | tr -d '"')
           DATE=$(date +'%d-%m-%Y')
           REPO="${{ github.repository }}"
           
           # 1. Create updater.json
-          cat <<EOF > addon-windows/updater.json
+          cat <<EOF > addon-win11/updater.json
           {
             "github_beta": "false",
             "last_update": "$DATE",
             "repository": "$REPO",
-            "slug": "addon-windows",
+            "slug": "addon-win11",
             "source": "github",
             "upstream_repo": "dockur/windows",
             "upstream_version": "$VERSION"
@@ -39,10 +39,10 @@ jobs:
           EOF
 
           # 2. Update CHANGELOG.md (Prepends newest version to the top)
-          if ! grep -q "## $VERSION" addon-windows/CHANGELOG.md; then
+          if ! grep -q "## $VERSION" addon-win11/CHANGELOG.md; then
             TEMP_CHANGELOG=$(mktemp)
-            echo -e "## $VERSION ($DATE)\n\n- Updated addon to version $VERSION\n\n$(cat addon-windows/CHANGELOG.md)" > "$TEMP_CHANGELOG"
-            mv "$TEMP_CHANGELOG" addon-windows/CHANGELOG.md
+            echo -e "## $VERSION ($DATE)\n\n- Updated addon to version $VERSION\n\n$(cat addon-win11/CHANGELOG.md)" > "$TEMP_CHANGELOG"
+            mv "$TEMP_CHANGELOG" addon-win11/CHANGELOG.md
           fi
 
       - name: Sync with Remote
@@ -56,4 +56,4 @@ jobs:
         uses: stefanzweifel/git-auto-commit-action@v5
         with:
           commit_message: "chore: update updater.json and CHANGELOG"
-          file_pattern: 'addon-windows/updater.json addon-windows/CHANGELOG.md'
+          file_pattern: 'addon-win11/updater.json addon-win11/CHANGELOG.md'
