@@ -1,4 +1,4 @@
-FROM falconchristmas/fpp:9.5
+FROM falconchristmas/fpp
 
 RUN apt-get update && \
     apt-get install -y nginx && \
