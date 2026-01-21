@@ -1,26 +1,27 @@
 #!/bin/bash
 set -e
 
-echo "🔧 Preparing persistent FPP directories..."
+# Optional: Silence Apache warning
+if ! grep -q "ServerName" /etc/apache2/apache2.conf; then
+    echo "ServerName localhost" >> /etc/apache2/apache2.conf
+fi
 
-# Create persistent directories
-mkdir -p /data/media /data/config /data/logs
+echo "🔧 Preparing persistent FPP storage (bind mount)"
 
-# Remove existing FPP directories if present
-rm -rf /home/fpp/media
-rm -rf /home/fpp/config
-rm -rf /home/fpp/logs
+# Ensure HA persistent storage exists
+mkdir -p /data
 
-# Symlink to HA persistent storage
-ln -s /data/media /home/fpp/media
-ln -s /data/config /home/fpp/config
-ln -s /data/logs /home/fpp/logs
+# Ensure target exists
+mkdir -p /home/fpp/media
 
-# Permissions (FPP runs as fpp user)
+# Mount /data over FPP media directory
+mountpoint -q /home/fpp/media || mount --bind /data /home/fpp/media
+
+# Permissions for FPP user
 chown -R fpp:fpp /data
 chmod -R 755 /data
 
-echo "✅ Persistent storage linked"
-echo "🚀 Starting Falcon Player..."
+echo "✅ /data bind-mounted to /home/fpp/media"
+echo "🚀 Starting Falcon Player"
 
 exec /opt/fpp/fpp
