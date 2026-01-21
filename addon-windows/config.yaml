@@ -37,8 +37,10 @@ options:
   VERSION: xp
   LANGUAGE: English
 
+schema:
+  DISK_SIZE: list(16G|32G|64G|128G)
+  VERSION: list(xp|11)
+  LANGUAGE: list(English|French)
+
 environment:
   KVM: "N"
-  DISK_SIZE: "{{ DISK_SIZE }}"
-  VERSION: "{{ VERSION }}"
-  LANGUAGE: "{{ LANGUAGE }}"
