@@ -17,7 +17,7 @@ host_network: true
 host_ipc: true
 
 ingress: true
-ingress_port: 8099
+ingress_port: 18080
 panel_icon: mdi:led-strip-variant
 
 full_access: true
