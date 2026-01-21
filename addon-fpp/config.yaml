@@ -19,11 +19,8 @@ host_ipc: true
 
 full_access: true
 
-options:
-  fpp_data_path: "/config/fpp"
-
-schema:
-  fpp_data_path: str
+map:
+  - data:rw:/home/fpp/media
 
 ingress: true
 ingress_port: 80
