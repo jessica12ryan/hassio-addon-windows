@@ -1,3 +1,7 @@
+## 0.7.1 (21-01-2026)
+
+- Updated addon to version 0.7.1
+
 ## 0.7.0 (12-01-2026)
 
 - Updated addon to version 0.7.0
