@@ -26,4 +26,4 @@ map:
 devices:
   - /dev/kvm:/dev/kvm
 environment:
-  KVM: "${KVM:-Y}"
+  KVM: "N"
