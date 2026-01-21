@@ -3,7 +3,7 @@ name: Build Persistent FPP Image
 on:
   push:
     paths:
-      - "addon-fpp/Dockerfile"
+      - 'addon-fpp/Dockerfile'
   workflow_dispatch:
 
 permissions:
