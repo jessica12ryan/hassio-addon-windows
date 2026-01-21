@@ -20,7 +20,7 @@ host_ipc: true
 full_access: true
 
 map:
-  - /media/fpp:rw:/data
+  - /media/fpp:rw:/home/fpp/media
 
 ingress: true
 ingress_port: 80
