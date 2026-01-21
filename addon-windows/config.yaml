@@ -32,17 +32,23 @@ ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
 webui: "http://[HOST]:[PORT:8006]"
 
-# Default values for options (shown in the UI)
 options:
-  DISK_SIZE: "16G"
-  VERSION: "xp"
-  LANGUAGE: "English"
+  DISK_SIZE:
+    - "16G"
+    - "32G"
+    - "64G"
+  VERSION:
+    - "xp"
+  LANGUAGE:
+    - "English"
 
-# Correct HA addon schema
 schema:
-  DISK_SIZE: list(16G,32G,64G)
-  VERSION: list(xp,7,10)
-  LANGUAGE: list(English,French)
+  DISK_SIZE:
+    - str
+  VERSION:
+    - str
+  LANGUAGE:
+    - str
 
 # Pass options to container
 environment:
