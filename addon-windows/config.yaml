@@ -25,5 +25,10 @@ map:
 
 devices:
   - /dev/kvm:/dev/kvm
+  
 environment:
   KVM: "N"
+  DISK_SIZE: "16G"
+  LANGUAGE: "English"
+  USERNAME: "Docker"
+  PASSWORD: "admin"
