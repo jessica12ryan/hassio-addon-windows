@@ -5,5 +5,5 @@
   "slug": "addon-fpp",
   "source": "github",
   "upstream_repo": "falconchristmas/fpp",
-  "upstream_version": "9.5.1"
+  "upstream_version": "master"
 }
