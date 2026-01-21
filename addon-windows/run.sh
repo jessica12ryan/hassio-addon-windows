@@ -1,23 +1,21 @@
-#!/usr/bin/with-contenv bash
+#!/bin/bash
 set -e
 
-# Read HA options
-KVM=$(jq -r '.KVM' /data/options.json)
-DISK_SIZE=$(jq -r '.DISK_SIZE' /data/options.json)
-VERSION=$(jq -r '.VERSION' /data/options.json)
-LANGUAGE=$(jq -r '.LANGUAGE' /data/options.json)
+OPTIONS_FILE="/data/options.json"
 
-# Export as environment variables for dockur/windows
-export KVM
-export DISK_SIZE
-export VERSION
-export LANGUAGE
+if [ -f "$OPTIONS_FILE" ]; then
+  export KVM=$(grep -oP '"KVM"\s*:\s*"\K[^"]+' "$OPTIONS_FILE")
+  export DISK_SIZE=$(grep -oP '"DISK_SIZE"\s*:\s*"\K[^"]+' "$OPTIONS_FILE")
+  export VERSION=$(grep -oP '"VERSION"\s*:\s*"\K[^"]+' "$OPTIONS_FILE")
+  export LANGUAGE=$(grep -oP '"LANGUAGE"\s*:\s*"\K[^"]+' "$OPTIONS_FILE")
+fi
 
-echo "Starting Windows VM"
-echo "KVM=$KVM"
-echo "DISK_SIZE=$DISK_SIZE"
-echo "VERSION=$VERSION"
-echo "LANGUAGE=$LANGUAGE"
+echo "=== Home Assistant Options ==="
+echo "KVM=${KVM}"
+echo "DISK_SIZE=${DISK_SIZE}"
+echo "VERSION=${VERSION}"
+echo "LANGUAGE=${LANGUAGE}"
+echo "=============================="
 
-# Start the original container entrypoint
-exec /entrypoint.sh
+# IMPORTANT: exec original dockur entrypoint
+exec /usr/bin/tini -s -- /run
