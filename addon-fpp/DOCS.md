@@ -17,6 +17,9 @@ You can open FPP by browsing to http://HA_IP
 ## Troubleshooting:
 - [FPP Addon Repo](https://github.com/jessica12ryan/homesync-addons)
 - [FPP Addon Issues](https://github.com/jessica12ryan/homesync-addons/issues)
+- [FPP Repo](https://github.com/FalconChristmas/fpp)
+- [FPP Issues](https://github.com/FalconChristmas/fpp/issues)
+- [xLights Zoom Room](https://xlightszoomroom.com)
 
 ## Credits:
 - [FalconChristmas](https://github.com/FalconChristmas/fpp) for Falcon Player
