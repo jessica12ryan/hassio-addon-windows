@@ -1,7 +1,7 @@
 name: "Windows"
 description: "Run lightweight Windows in Docker with browser-based access"
 version: "0.7.0"
-slug: "windows"
+slug: "addon-windows"
 arch:
   - amd64
 startup: "services"
