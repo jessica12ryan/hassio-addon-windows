@@ -40,9 +40,9 @@ options:
 
 # Correct HA addon schema
 schema:
-  DISK_SIZE: str()
-  VERSION: str()
-  LANGUAGE: str()
+  DISK_SIZE: string
+  VERSION: string
+  LANGUAGE: string
 
 # Pass options to container
 environment:
