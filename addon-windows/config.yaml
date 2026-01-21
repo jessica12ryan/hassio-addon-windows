@@ -8,9 +8,10 @@ startup: "services"
 panel: true
 boot: "auto"
 ingress: true
-ingress_port: 80
+ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
-host_network: false
+webui: "http://[HOST]:8006"
+host_network: true
 host_ipc: true
 privileged:
   - SYS_ADMIN
@@ -21,5 +22,3 @@ privileged:
 full_access: true
 map:
   - config:rw
-ports:
-  6080/tcp: 6080
