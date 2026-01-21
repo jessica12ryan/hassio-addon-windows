@@ -38,9 +38,12 @@ options:
   LANGUAGE: English
 
 schema:
-  DISK_SIZE: list(16G|32G|64G|128G)
-  VERSION: list(xp|11)
-  LANGUAGE: list(English|French)
+  DISK_SIZE:
+    - string
+  VERSION:
+    - string
+  LANGUAGE:
+    - string
 
 environment:
   KVM: "N"
