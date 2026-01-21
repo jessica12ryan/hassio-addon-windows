@@ -12,7 +12,7 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 
 - AMD64 Based System
 - Home Assistant Operating System
-- Atleast 15GB Free Space
+- 64GB Free Space (Dedicated)
 
 ## Installation
 
