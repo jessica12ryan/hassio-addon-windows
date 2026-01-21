@@ -38,27 +38,14 @@ options:
   VERSION: "xp"
   LANGUAGE: "English"
 
-# Make them user-editable in Home Assistant
+# Correct HA addon schema
 schema:
-  DISK_SIZE:
-    type: string
-    name: "Disk Size"
-    description: "Size of the Windows disk image"
-    default: "16G"
-  VERSION:
-    type: string
-    name: "Windows Version"
-    description: "Version of Windows to run"
-    default: "xp"
-  LANGUAGE:
-    type: string
-    name: "Language"
-    description: "Language of Windows"
-    default: "English"
+  DISK_SIZE: str()
+  VERSION: str()
+  LANGUAGE: str()
 
-# Pass options directly to the environment
+# Pass options to container
 environment:
-  KVM: "N"
   DISK_SIZE: "{{ DISK_SIZE }}"
   VERSION: "{{ VERSION }}"
   LANGUAGE: "{{ LANGUAGE }}"
