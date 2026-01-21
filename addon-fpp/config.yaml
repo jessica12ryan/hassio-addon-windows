@@ -4,7 +4,7 @@ version: "9.5"
 slug: "addon-fpp"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
-image: "falconchristmas/fpp"
+image: "falconchristmas/fpp:9.5"
 
 arch:
   - amd64
@@ -15,6 +15,10 @@ boot: "auto"
 
 host_network: true
 host_ipc: true
+
+ingress: true
+ingress_port: 8099
+panel_icon: mdi:led-strip-variant
 
 full_access: true
 map:
