@@ -4,8 +4,8 @@
 
 ## Getting Started
 
-Install and start the add-on.
-You can open FPP by browsing to http://HA_IP
+- After clicking install, it may take several minutes to download and compile FPP. If you refresh or browse to another page, the addon will continue downloading. The addon page will update when the addon has been successfully installed.
+- You can open FPP by browsing to http://HA_IP
 
 ## More Info
 
