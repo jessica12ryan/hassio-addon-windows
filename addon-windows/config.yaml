@@ -31,9 +31,34 @@ ingress: true
 ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
 webui: "http://[HOST]:[PORT:8006]"
-  
-environment:
-  KVM: "N"
+
+
+# Default values for options (shown in the UI)
+options:
   DISK_SIZE: "16G"
   VERSION: "xp"
   LANGUAGE: "English"
+
+# Make them user-editable in Home Assistant
+schema:
+  DISK_SIZE:
+    type: string
+    name: "Disk Size"
+    description: "Size of the Windows disk image"
+    default: "16G"
+  VERSION:
+    type: string
+    name: "Windows Version"
+    description: "Version of Windows to run"
+    default: "xp"
+  LANGUAGE:
+    type: string
+    name: "Language"
+    description: "Language of Windows"
+    default: "English"
+
+environment:
+  KVM: "N"
+  DISK_SIZE: !secret DISK_SIZE
+  VERSION: !secret VERSION
+  LANGUAGE: !secret LANGUAGE
