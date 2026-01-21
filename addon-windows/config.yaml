@@ -32,8 +32,3 @@ webui: "http://[HOST]:[PORT:8006]"
   
 environment:
   KVM: "N"
-  DISK_SIZE: "16G"
-  VERSION: "xp"
-  LANGUAGE: "English"
-  USERNAME: "Docker"
-  PASSWORD: "admin"
