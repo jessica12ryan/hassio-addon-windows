@@ -46,6 +46,7 @@ schema:
 
 # Pass options to container
 environment:
+  KVM: "N"
   DISK_SIZE: "{{ DISK_SIZE }}"
   VERSION: "{{ VERSION }}"
   LANGUAGE: "{{ LANGUAGE }}"
