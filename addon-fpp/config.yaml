@@ -16,15 +16,6 @@ boot: "auto"
 host_network: true
 host_ipc: true
 
-privileged: true
-
-capabilities:
-  - NET_ADMIN
-  - SYS_ADMIN
-  - SYS_RAWIO
-  - SYS_PTRACE
-  - DAC_READ_SEARCH
-
 full_access: true
 map:
   - config:rw
