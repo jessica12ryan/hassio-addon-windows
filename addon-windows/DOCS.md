@@ -6,7 +6,6 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 
 - Windows-in-Docker with QEMU
 - Web-based access via Home Assistant Ingress (noVNC)
-- Optional external port exposure
 
 ## Requirements
 
