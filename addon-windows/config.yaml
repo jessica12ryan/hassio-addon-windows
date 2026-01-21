@@ -25,7 +25,7 @@ map:
   - config:rw
 
 ports:
-  - "8006:8006/tcp"
+  8006/tcp: 8006
 
 ingress: true
 ingress_port: 8006
