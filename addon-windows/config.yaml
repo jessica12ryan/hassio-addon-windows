@@ -32,7 +32,6 @@ ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
 webui: "http://[HOST]:[PORT:8006]"
 
-
 # Default values for options (shown in the UI)
 options:
   DISK_SIZE: "16G"
@@ -57,8 +56,9 @@ schema:
     description: "Language of Windows"
     default: "English"
 
+# Pass options directly to the environment
 environment:
   KVM: "N"
-  DISK_SIZE: !secret DISK_SIZE
-  VERSION: !secret VERSION
-  LANGUAGE: !secret LANGUAGE
+  DISK_SIZE: "{{ DISK_SIZE }}"
+  VERSION: "{{ VERSION }}"
+  LANGUAGE: "{{ LANGUAGE }}"
