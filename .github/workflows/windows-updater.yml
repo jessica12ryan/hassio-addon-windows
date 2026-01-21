@@ -31,7 +31,7 @@ jobs:
             "github_beta": "false",
             "last_update": "$DATE",
             "repository": "$REPO",
-            "slug": "windows",
+            "slug": "addon-windows",
             "source": "github",
             "upstream_repo": "dockur/windows",
             "upstream_version": "$VERSION"
