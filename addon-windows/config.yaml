@@ -42,7 +42,6 @@ schema:
   VERSION: list(xp|11)
   LANGUAGE: list(English|French)
 
-# Pass options to container
 environment:
   KVM: "N"
   DISK_SIZE: "{{ DISK_SIZE }}"
