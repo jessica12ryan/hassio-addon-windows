@@ -1,6 +1,6 @@
-# Windows Add-on for Home Assistant
+# Windows 11 Add-on for Home Assistant
 
-This add-on allows you to run a lightweight Windows environment inside Home Assistant using [Dockur Windows](https://github.com/dockur/windows) with noVNC access.
+This add-on allows you to run a Windows 11 environment inside Home Assistant using [Dockur Windows](https://github.com/dockur/windows) with noVNC access.
 
 ## Features
 
@@ -11,7 +11,7 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 
 - AMD64 Based System
 - Home Assistant Operating System
-- 64GB Free Space (Dedicated)
+- 32GB Free Space (Dedicated)
 
 ## Installation
 
