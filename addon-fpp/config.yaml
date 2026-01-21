@@ -16,12 +16,24 @@ boot: "auto"
 host_network: true
 host_ipc: true
 
-ingress: true
-ingress_port: 80
-panel_icon: mdi:led-strip-variant
-
 full_access: true
 map:
   - config:rw
   - media:rw
   - share:rw
+
+ingress: true
+ingress_port: 80
+panel_icon: mdi:led-strip-variant
+
+options:
+  fpp_port: 80
+
+schema:
+  fpp_port:
+    description: "FPP web UI port"
+    type: integer
+    default: 80
+
+environment:
+  FPP_PORT: "!secret fpp_port"
