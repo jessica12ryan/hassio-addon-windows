@@ -4,7 +4,7 @@ version: "9.5.1"
 slug: "addon-fpp"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
-image: "falconchristmas/fpp"
+image: "ghcr.io/jessica12ryan/fpp_haos:latest"
 
 arch:
   - amd64
@@ -20,10 +20,7 @@ host_ipc: true
 full_access: true
 
 map:
-  - /config/fpp:rw:/home/fpp/media
-
-environment:
-  FPP_MEDIA: "/home/fpp/media"
+  - /config/fpp:rw:/data
 
 ingress: true
 ingress_port: 80
