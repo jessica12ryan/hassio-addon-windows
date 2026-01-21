@@ -23,4 +23,4 @@ full_access: true
 map:
   - config:rw
 environment:
-  - KVM=N
+  KVM: "N"
