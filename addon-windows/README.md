@@ -25,24 +25,7 @@ Once the repository is added, select the addon from the addon store, and then cl
 ## Usage
 
 - Open from the Home Assistant Add-on panel
-- Or access externally at `http://<HA-IP>:<port>/vnc.html` (if ingress is disabled)
-
-## Configuration
-
-ram_size: Allows you to change the amount of maximum memory that Windows is allowed to consume. Must be atleast "2G". Default is "4G" as shown below.
-```yaml
-ram_size: 4G
-```
-
-version: Allows you to specify the version of Windows. Can be "11", "10", or "tiny11". Default is "tiny11" as shown below.
-```yaml
-version: tiny11
-```
-
-port: Allows you to specify the TCP web port of noVNC. Default is "6080" as shown below.
-```yaml
-6080/tcp: 6080
-```
+- Or access externally at `http://<HA-IP>:8006/vnc.html` (if ingress is disabled)
 
 ## Troubleshooting
 
