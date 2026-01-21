@@ -10,7 +10,7 @@ boot: "auto"
 ingress: true
 ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
-webui: "http://[HOST]:8006"
+webui: "http://[HOST]:[PORT:8006]"
 host_network: true
 host_ipc: true
 privileged:
