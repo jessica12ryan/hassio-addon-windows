@@ -2,6 +2,8 @@
 
 [![FPP logo](https://raw.githubusercontent.com/jessica12ryan/homesync-addons/master/addon-fpp/logo.png)](https://github.com/FalconChristmas/fpp/)
 
+## Getting Started
+
 Install and start the add-on.
 You can open FPP by browsing to http://HA_IP
 
