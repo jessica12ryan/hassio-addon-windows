@@ -16,7 +16,8 @@ This add-on allows you to run a lightweight Windows environment inside Home Assi
 
 ## Installation
 
-Open the addon and then click install. The install wheel will spin for about 15-20 minutes. Stay on this page as the install is about 15GB and takes some time to download and install.
+Open the addon and then click install. 
+It is recommended that you turn off protected mode before starting the addon.
 
 ## Usage
 
