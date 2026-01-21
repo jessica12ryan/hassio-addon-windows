@@ -33,8 +33,14 @@ ingress_port: 8006
 panel_icon: "mdi:microsoft-windows"
 webui: "http://[HOST]:[PORT:8006]"
 
-environment:
+options:
   KVM: "N"
   DISK_SIZE: "16G"
   VERSION: "11"
   LANGUAGE: "English"
+
+schema:
+  KVM: string
+  DISK_SIZE: list(16G|32G|64G|128G)
+  VERSION: list(xp|11)
+  LANGUAGE: list(English|French)
