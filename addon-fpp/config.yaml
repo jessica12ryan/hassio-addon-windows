@@ -13,7 +13,6 @@ arch:
   
 startup: "services"
 boot: "auto"
-init: "/run.sh"
 
 host_network: true
 host_ipc: true
