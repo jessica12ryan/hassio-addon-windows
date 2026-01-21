@@ -33,22 +33,14 @@ panel_icon: "mdi:microsoft-windows"
 webui: "http://[HOST]:[PORT:8006]"
 
 options:
-  DISK_SIZE:
-    - "16G"
-    - "32G"
-    - "64G"
-  VERSION:
-    - "xp"
-  LANGUAGE:
-    - "English"
+  DISK_SIZE: 16G
+  VERSION: xp
+  LANGUAGE: English
 
 schema:
-  DISK_SIZE:
-    - str
-  VERSION:
-    - str
-  LANGUAGE:
-    - str
+  DISK_SIZE: list(16G|32G|64G|128G)
+  VERSION: list(xp|11)
+  LANGUAGE: list(English|French)
 
 # Pass options to container
 environment:
