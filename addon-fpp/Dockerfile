@@ -25,9 +25,9 @@ RUN mkdir -p /home/fpp \
 
 # Install FPP
 WORKDIR /opt
-RUN wget -O fpp.tar.gz https://github.com/FalconChristmas/fpp/releases/download/v9.5.1/FPP-v9.5.1.tar.gz \
+RUN wget -O fpp.tar.gz https://github.com/FalconChristmas/fpp/archive/refs/tags/v9.5.1.tar.gz \
     && tar xzf fpp.tar.gz \
-    && mv FPP-* fpp \
+    && mv fpp-9.5.1 fpp \
     && rm fpp.tar.gz
 
 # 🔑 CRITICAL PART — persistent media directory
