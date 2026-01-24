@@ -4,7 +4,8 @@ version: "master"
 slug: "addon-fpp"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
-image: "falconchristmas/fpp"
+build: .
+#image: "falconchristmas/fpp"
 
 arch:
   - amd64
