@@ -33,7 +33,7 @@ RUN mkdir -p scripts \
 
 # Build FPP from source
 RUN mkdir -p build && cd build \
-    && cmake .. \
+    && cmake ../src \
     && make -j$(nproc)
 
 # Set ownership and permissions
