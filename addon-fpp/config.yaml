@@ -25,7 +25,7 @@ ingress_port: 80
 panel_icon: mdi:led-strip-variant
 
 map:
-  - data:rw
+  - config:rw
 
 environment:
   FPP_MEDIA_DIR: /home/fpp/media
