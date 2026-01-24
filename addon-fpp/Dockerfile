@@ -2,47 +2,43 @@ FROM debian:bookworm-slim
 
 ENV DEBIAN_FRONTEND=noninteractive
 
-# Install dependencies
+# Install build and runtime dependencies
 RUN apt-get update && apt-get install -y \
-    curl \
-    wget \
-    ca-certificates \
-    sudo \
-    python3 \
-    python3-pip \
-    rsync \
-    procps \
-    tzdata \
+    build-essential cmake git wget curl \
+    libusb-1.0-0-dev libx11-dev libxext-dev \
+    libavcodec-dev libavformat-dev libavutil-dev libswscale-dev \
+    libssl-dev python3 python3-pip rsync procps tzdata \
     && rm -rf /var/lib/apt/lists/*
 
-# Create fpp user/group
+# Create fpp user
 RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp
 
-# Create base directories
-RUN mkdir -p /home/fpp \
-    /opt/fpp \
-    /config/fpp
+# Create directories
+RUN mkdir -p /home/fpp /opt/fpp /config/fpp
 
-# Install FPP
-WORKDIR /opt
+# Symlink persistent media
+RUN rm -rf /home/fpp/media && ln -s /config/fpp /home/fpp/media
+
+WORKDIR /opt/fpp
+
+# Download FPP source
 RUN wget -O fpp.tar.gz https://github.com/FalconChristmas/fpp/archive/refs/tags/9.5.2.tar.gz \
-    && tar xzf fpp.tar.gz \
-    && mv fpp-9.5.2 fpp \
+    && tar xzf fpp.tar.gz --strip-components=1 \
     && rm fpp.tar.gz
 
-# 🔑 CRITICAL PART — persistent media directory
-RUN rm -rf /home/fpp/media \
-    && ln -s /config/fpp /home/fpp/media
+# Copy Docker start script as FPP start
+RUN mkdir -p scripts \
+    && wget -O scripts/start_fpp.sh https://raw.githubusercontent.com/FalconChristmas/fpp/refs/heads/master/Docker/runDocker.sh \
+    && chmod +x scripts/start_fpp.sh
 
-# Permissions (VERY IMPORTANT)
-RUN chown -R fpp:fpp /home/fpp /config/fpp /opt/fpp
+# Build FPP
+RUN mkdir -p build && cd build && cmake .. && make -j$(nproc)
 
-# Expose FPP web UI
-EXPOSE 80
+# Set ownership
+RUN chown -R fpp:fpp /home/fpp /opt/fpp /config/fpp
 
-# Switch user
+# Switch to fpp user
 USER fpp
-
 WORKDIR /opt/fpp
 
 # Start FPP
