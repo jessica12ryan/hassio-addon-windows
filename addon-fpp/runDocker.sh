@@ -2,6 +2,7 @@
 # -- FPP Add-on for Home Assistant --
 # -----------------------------------
 # ---------- runDocker.sh -----------
+# -----------------------------------
 
 #!/bin/bash
 # HA-friendly FPP entrypoint
