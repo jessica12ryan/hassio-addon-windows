@@ -46,7 +46,7 @@ RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /o
 # -----------------------------
 # Copy HA-friendly run script
 # -----------------------------
-COPY Docker/runDocker.sh /opt/fpp/Docker/runDocker.sh
+COPY runDocker.sh /opt/fpp/Docker/runDocker.sh
 RUN chmod +x /opt/fpp/Docker/runDocker.sh
 
 # -----------------------------
