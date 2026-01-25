@@ -5,22 +5,15 @@
 # -----------------------------------
 
 #!/bin/bash
-# HA-friendly FPP run script
+set -e
 
-FPP_DIR="/opt/fpp"
-CONFIG_DIR="/home/fpp/media"
+# Ensure /config/fpp exists
+mkdir -p /config/fpp
 
-mkdir -p "$CONFIG_DIR"
-
-# Check fppinit exists
-if [ ! -f "$FPP_DIR/src/fppinit" ]; then
-    echo "ERROR: fppinit not found! Did FPP_Install.sh run correctly?"
-    tail -f /dev/null
-    exit 1
+# Start FPP services
+if [ -f /opt/fpp/src/fppinit ]; then
+    /opt/fpp/src/fppinit start
 fi
 
-# Start FPP
-"$FPP_DIR/src/fppinit" start
-
-# Keep container alive
+# Keep container running
 tail -f /dev/null
