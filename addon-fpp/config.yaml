@@ -17,7 +17,7 @@ boot: "auto"
 ports:
   80/tcp: 80
   80/udp: 80
-  22/tcp: 4200
+  22/tcp: 22
   4048/udp: 4048
   5568/udp: 5568
   32320/udp: 32320
