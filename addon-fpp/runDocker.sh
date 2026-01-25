@@ -5,30 +5,22 @@
 # -----------------------------------
 
 #!/bin/bash
-# HA-friendly FPP entrypoint
-# ---------------------------------
+# HA-friendly FPP run script
 
 FPP_DIR="/opt/fpp"
 CONFIG_DIR="/home/fpp/media"
 
-echo "Starting FPP..."
-
-# Ensure persistent directories exist
 mkdir -p "$CONFIG_DIR"
 
-# Build FPP init if missing
+# Check fppinit exists
 if [ ! -f "$FPP_DIR/src/fppinit" ]; then
-    echo "fppinit missing, attempting build..."
-    cd "$FPP_DIR/build" || mkdir -p "$FPP_DIR/build" && cd "$FPP_DIR/build"
-    cmake .. && make -j$(nproc)
+    echo "ERROR: fppinit not found! Did FPP_Install.sh run correctly?"
+    tail -f /dev/null
+    exit 1
 fi
 
-# Run FPP init
-if [ -f "$FPP_DIR/src/fppinit" ]; then
-    "$FPP_DIR/src/fppinit" start
-else
-    echo "ERROR: fppinit not found!"
-fi
+# Start FPP
+"$FPP_DIR/src/fppinit" start
 
 # Keep container alive
 tail -f /dev/null
