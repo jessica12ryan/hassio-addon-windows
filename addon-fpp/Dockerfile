@@ -1,17 +1,14 @@
 #
-# Official FPP Dockerfile, modified for HA Add-on persistence
+# FPP HA Add-on Dockerfile (persistent, build from source)
 #
 FROM debian:trixie
 
-# Set noninteractive frontend
+# Avoid interactive prompts during apt installs
 ENV DEBIAN_FRONTEND=noninteractive
-
-# Upgrade base system
-RUN apt-get update && apt-get -yq upgrade
 
 ARG PHPVER="8.4"
 
-# Packages required for FPP
+# Essential packages (desktop + dev tools for building FPP)
 ARG PACKAGE_LIST="alsa-utils arping avahi-daemon avahi-utils locales nano net-tools \
     apache2 apache2-bin apache2-data apache2-utils libavahi-client-dev \
     bc bash-completion btrfs-progs exfatprogs lsof ethtool curl zip unzip bzip2 wireless-tools dos2unix \
@@ -29,64 +26,50 @@ ARG PACKAGE_LIST="alsa-utils arping avahi-daemon avahi-utils locales nano net-to
     fonts-freefont-ttf flex bison pkg-config libasound2-dev mesa-common-dev qrencode libusb-1.0-0-dev \
     python3-setuptools libssl-dev libtool bsdextrautils iw rsyslog tzdata ccache libsystemd-dev"
 
-ARG PACKAGE_LIST_DOCKER=ssh
+# Docker-specific packages
+ARG PACKAGE_LIST_DOCKER="ssh"
 
-# Optimize apt
-RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup
-RUN echo '\
-Acquire::http {No-Cache=True;};\
-Acquire::https {No-Cache=True;};\
-Acquire::Retries "32";\
-Acquire::https::Timeout "240";\
-Acquire::http::Timeout "240";\
-APT::Get::Assume-Yes "true";\
-APT::Install-Recommends "false";\
-APT::Install-Suggests "false";\
-Debug::Acquire::https "true";\
-' > /etc/apt/apt.conf.d/99custom
+# Speed up apt
+RUN echo "force-unsafe-io" > /etc/dpkg/dpkg.cfg.d/02apt-speedup \
+    && echo 'Acquire::http {No-Cache=True;}; Acquire::https {No-Cache=True;}; Acquire::Retries "32"; Acquire::https::Timeout "240"; Acquire::http::Timeout "240"; APT::Get::Assume-Yes "true"; APT::Install-Recommends "false"; APT::Install-Suggests "false"; Debug::Acquire::https "true";' > /etc/apt/apt.conf.d/99custom
 
-# Install base packages
-RUN apt-get update && apt-get install -yq $PACKAGE_LIST
-RUN apt-get update && apt-get install -yq $PACKAGE_LIST_DOCKER
-RUN apt-get clean
+# Install all packages
+RUN apt-get update && apt-get install -yq $PACKAGE_LIST $PACKAGE_LIST_DOCKER && apt-get clean
 
-# Create FPP user & directories
-RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp
-RUN mkdir -p /home/fpp /opt/fpp /config/fpp \
+# Create FPP user and directories
+RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp \
+    && mkdir -p /home/fpp /opt/fpp /config/fpp \
     && rm -rf /home/fpp/media \
     && ln -s /config/fpp /home/fpp/media \
     && chown -R fpp:fpp /home/fpp /config/fpp /opt/fpp
 
-# Make /run/php writable for PHP-FPM
-RUN mkdir -p /run/php && chown -R fpp:fpp /run/php
-# Make PHP log writable
-RUN mkdir -p /var/log && touch /var/log/php${PHPVER}-fpm.log && chown -R fpp:fpp /var/log
+WORKDIR /opt/fpp
 
-# Copy FPP source (make sure you include SD/ folder here)
-COPY ./ /opt/fpp/
-COPY SD/FPP_Install.sh /root/FPP_Install.sh
-COPY SD/buildVLC.sh /root/buildVLC.sh
+# Clone FPP source code (submodules included)
+RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /opt/fpp \
+    && git checkout master \
+    && chown -R fpp:fpp /opt/fpp
 
-# Build VLC (optional, skip failures)
-RUN chmod +x /root/buildVLC.sh && ( yes | /root/buildVLC.sh ) || true
+# Add the runtime script
+RUN mkdir -p /opt/fpp/Docker \
+    && wget -O /opt/fpp/Docker/runDocker.sh https://raw.githubusercontent.com/FalconChristmas/fpp/master/Docker/runDocker.sh \
+    && chmod +x /opt/fpp/Docker/runDocker.sh
 
-# Install FPP (skip apt and VLC since we already installed)
-ARG EXTRA_INSTALL_FLAG=
-ARG FPPBRANCH=
-RUN ( yes | bash /root/FPP_Install.sh $EXTRA_INSTALL_FLAG --branch ${FPPBRANCH:-master} --skip-apt-install --skip-vlc )
+# Build FPP from source
+USER fpp
+RUN mkdir -p build && cd build \
+    && cmake .. \
+    && make -j$(nproc)
 
-# Copy default asoundrc
+# Copy .asoundrc for audio
+USER root
 RUN cp /opt/fpp/etc/asoundrc.plain /root/.asoundrc
 
-# Initialize FPP (creates directories, sets permissions)
-RUN /opt/fpp/src/fppinit start
-
-# Expose volume for persistent media
+# Ensure persistence
 VOLUME /home/fpp/media
 
-# Expose ports
+# Expose FPP ports
 EXPOSE 80 4048/udp 5568/udp 32320/udp 32322 9000/udp 9000/tcp
 
-# Use runDocker.sh as entrypoint (make sure it's executable)
-RUN chmod +x /opt/fpp/Docker/runDocker.sh
+# Runtime entrypoint (starts FPP services at container start)
 ENTRYPOINT ["/opt/fpp/Docker/runDocker.sh"]
