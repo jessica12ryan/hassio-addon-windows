@@ -1,70 +1,76 @@
-#
-# Home Assistant Friendly FPP Dockerfile
-# Persistent /config/fpp mapped to /home/fpp/media
-#
+# -----------------------------------
+# -- FPP Add-on for Home Assistant --
+# -----------------------------------
+# ----------- Dockerfile ------------
+# -----------------------------------
 
 FROM debian:trixie
 
-# -----------------------------
-# Set noninteractive for apt
-# -----------------------------
-ENV DEBIAN_FRONTEND=noninteractive
+ARG PHPVER="8.4"
 
 # -----------------------------
-# Install required packages
+# Base packages
 # -----------------------------
-RUN apt-get update && apt-get -yq upgrade \
-    && apt-get install -yq \
+RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
+    DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
         git wget curl build-essential cmake python3-setuptools \
-        php8.4 php8.4-cli php8.4-fpm php8.4-common php8.4-curl \
-        php8.4-bcmath php8.4-sqlite3 php8.4-zip php8.4-xml \
-        apache2 locales nano net-tools unzip bzip2 sudo \
-    && apt-get clean
+        php${PHPVER} php${PHPVER}-cli php${PHPVER}-fpm php${PHPVER}-common php${PHPVER}-curl \
+        php${PHPVER}-bcmath php${PHPVER}-sqlite3 php${PHPVER}-zip php${PHPVER}-xml \
+        apache2 locales nano net-tools unzip bzip2 sudo && \
+    apt-get clean
 
 # -----------------------------
-# Create FPP user/group
+# Create fpp user and persistent directories
 # -----------------------------
 RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp
-
-# -----------------------------
-# Persistent folders
-# -----------------------------
-RUN mkdir -p /home/fpp /config/fpp \
-    && rm -rf /home/fpp/media \
-    && ln -s /config/fpp /home/fpp/media
+RUN mkdir -p /home/fpp /config/fpp && \
+    rm -rf /home/fpp/media && \
+    ln -s /config/fpp /home/fpp/media
 
 # -----------------------------
 # Clone FPP repo
 # -----------------------------
 WORKDIR /opt/fpp
-RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /opt/fpp \
-    && git checkout master
+RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /opt/fpp && \
+    git checkout master
 
 # -----------------------------
-# Copy HA-friendly runDocker.sh
+# Copy HA-friendly scripts
 # -----------------------------
-COPY runDocker.sh /opt/fpp/Docker/runDocker.sh
+COPY Docker/runDocker.sh /opt/fpp/Docker/runDocker.sh
 RUN chmod +x /opt/fpp/Docker/runDocker.sh
 
+COPY SD/FPP_Install.sh /root/FPP_Install.sh
+
 # -----------------------------
-# Set ownership (after FPP exists)
+# Build FPP from source
+# -----------------------------
+RUN chmod +x /root/FPP_Install.sh && \
+    bash /root/FPP_Install.sh --skip-apt-install --skip-vlc
+
+# Optional: fallback build in case fppinit is missing
+RUN mkdir -p /opt/fpp/build && \
+    cd /opt/fpp/build && \
+    cmake .. && make -j$(nproc)
+
+# -----------------------------
+# Fix ownership
 # -----------------------------
 RUN chown -R fpp:fpp /home/fpp /config/fpp /opt/fpp
 
 # -----------------------------
-# Optional: Initialize FPP directories and permissions
+# Persistent volume
 # -----------------------------
-USER fpp
-RUN /opt/fpp/src/fppinit start || true
-USER root
+VOLUME /config/fpp
 
 # -----------------------------
-# Expose ports
+# Ports
 # -----------------------------
-VOLUME /home/fpp/media
 EXPOSE 80 4048/udp 5568/udp 32320/udp 32322 9000/udp 9000/tcp
 
 # -----------------------------
-# Entrypoint
+# Entry point
 # -----------------------------
+USER fpp
 ENTRYPOINT ["/opt/fpp/Docker/runDocker.sh"]
