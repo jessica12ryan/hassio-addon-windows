@@ -8,69 +8,52 @@ FROM debian:trixie
 
 ARG PHPVER="8.4"
 
-# -----------------------------
-# Base packages
-# -----------------------------
+# Install base packages
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade && \
     DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-        git wget curl build-essential cmake python3-setuptools \
+        git wget curl build-essential python3-setuptools \
         php${PHPVER} php${PHPVER}-cli php${PHPVER}-fpm php${PHPVER}-common php${PHPVER}-curl \
         php${PHPVER}-bcmath php${PHPVER}-sqlite3 php${PHPVER}-zip php${PHPVER}-xml \
-        apache2 locales nano net-tools unzip bzip2 sudo && \
+        apache2 locales nano net-tools unzip bzip2 && \
     apt-get clean
 
-# -----------------------------
-# Create fpp user and persistent directories
-# -----------------------------
+# Create FPP user and persistent folders
 RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp
 RUN mkdir -p /home/fpp /config/fpp && \
     rm -rf /home/fpp/media && \
-    ln -s /config/fpp /home/fpp/media
+    ln -s /config/fpp /home/fpp/media && \
+    chown -R fpp:fpp /home/fpp /config/fpp
 
-# -----------------------------
-# Clone FPP repo
-# -----------------------------
+# Set working directory
 WORKDIR /opt/fpp
+
+# Clone FPP repository
 RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /opt/fpp && \
     git checkout master
 
-# -----------------------------
-# Copy HA-friendly scripts
-# -----------------------------
-COPY runDocker.sh /opt/fpp/Docker/runDocker.sh
-RUN chmod +x /opt/fpp/Docker/runDocker.sh
+# Copy HA-friendly run script
+COPY runDocker.sh /opt/fpp/runDocker.sh
+RUN chmod +x /opt/fpp/runDocker.sh
 
-COPY SD/FPP_Install.sh /root/FPP_Install.sh
+# Copy SD folder with scripts
+COPY SD/ /opt/fpp/SD/
+RUN chmod +x /opt/fpp/SD/*.sh
 
-# -----------------------------
-# Build FPP from source
-# -----------------------------
-RUN chmod +x /root/FPP_Install.sh && \
-    bash /root/FPP_Install.sh --skip-apt-install --skip-vlc
+# Install FPP (non-interactive)
+RUN yes | bash /opt/fpp/SD/FPP_Install.sh --skip-apt-install --skip-vlc --branch master
 
-# Optional: fallback build in case fppinit is missing
-RUN mkdir -p /opt/fpp/build && \
-    cd /opt/fpp/build && \
-    cmake .. && make -j$(nproc)
+# Fix ownership again after install
+RUN chown -R fpp:fpp /opt/fpp /home/fpp /config/fpp
 
-# -----------------------------
-# Fix ownership
-# -----------------------------
-RUN chown -R fpp:fpp /home/fpp /config/fpp /opt/fpp
-
-# -----------------------------
-# Persistent volume
-# -----------------------------
+# Persistent media folder
 VOLUME /config/fpp
 
-# -----------------------------
 # Ports
-# -----------------------------
 EXPOSE 80 4048/udp 5568/udp 32320/udp 32322 9000/udp 9000/tcp
 
-# -----------------------------
-# Entry point
-# -----------------------------
+# Run container as FPP user
 USER fpp
-ENTRYPOINT ["/opt/fpp/Docker/runDocker.sh"]
+
+# Entry point
+ENTRYPOINT ["/opt/fpp/runDocker.sh"]
