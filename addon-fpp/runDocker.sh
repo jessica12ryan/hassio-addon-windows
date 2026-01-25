@@ -7,13 +7,14 @@
 #!/bin/bash
 set -e
 
-# Ensure /config/fpp exists
-mkdir -p /config/fpp
+# Ensure /run/php exists
+mkdir -p /run/php
 
-# Start FPP services
-if [ -f /opt/fpp/src/fppinit ]; then
-    /opt/fpp/src/fppinit start
-fi
+# Fix ownership of config and FPP folders
+chown -R fpp:fpp /opt/fpp /home/fpp /config/fpp
 
-# Keep container running
-tail -f /dev/null
+# Start PHP-FPM
+php-fpm8.4 -F &
+
+# Start Apache
+apache2ctl -D FOREGROUND
