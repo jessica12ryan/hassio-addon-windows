@@ -9,28 +9,27 @@ FROM debian:trixie
 ARG PHPVER="8.4"
 
 # -----------------------------
-# Basic OS updates and packages
+# System updates and packages
 # -----------------------------
 RUN DEBIAN_FRONTEND=noninteractive apt-get update && \
-    DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade
-
-# Required packages
-RUN apt-get update && DEBIAN_FRONTEND=noninteractive apt-get install -yq \
-    git wget curl build-essential cmake python3-setuptools \
-    php${PHPVER} php${PHPVER}-cli php${PHPVER}-fpm php${PHPVER}-common php${PHPVER}-curl \
-    php${PHPVER}-bcmath php${PHPVER}-sqlite3 php${PHPVER}-zip php${PHPVER}-xml \
-    apache2 locales nano net-tools unzip bzip2 \
-    graphicsmagick libgraphicsmagick++-dev libmicrohttpd-dev libzstd-dev \
-    jq \
-    && apt-get clean
+    DEBIAN_FRONTEND=noninteractive apt-get -yq upgrade && \
+    DEBIAN_FRONTEND=noninteractive apt-get install -yq \
+        git wget curl build-essential cmake python3-setuptools \
+        php${PHPVER} php${PHPVER}-cli php${PHPVER}-fpm php${PHPVER}-common php${PHPVER}-curl \
+        php${PHPVER}-bcmath php${PHPVER}-sqlite3 php${PHPVER}-zip php${PHPVER}-xml \
+        apache2 locales nano net-tools unzip bzip2 \
+        graphicsmagick libgraphicsmagick++-dev libmicrohttpd-dev libzstd-dev \
+        jq && \
+    apt-get clean
 
 # -----------------------------
-# User and persistent folders
+# Create FPP user and persistent folders
 # -----------------------------
 RUN groupadd -r fpp && useradd -r -g fpp -d /home/fpp -s /bin/bash fpp
 
-# Persistent HA folder
-RUN mkdir -p /home/fpp /config/fpp && \
+# Persistent HA volume
+RUN mkdir -p /config/fpp && \
+    mkdir -p /home/fpp && \
     rm -rf /home/fpp/media && \
     ln -s /config/fpp /home/fpp/media && \
     chown -R fpp:fpp /home/fpp /config/fpp
@@ -38,34 +37,38 @@ RUN mkdir -p /home/fpp /config/fpp && \
 WORKDIR /opt/fpp
 
 # -----------------------------
-# Clone FPP source
+# Clone FPP repository
 # -----------------------------
 RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /opt/fpp && \
     git checkout master && \
     chown -R fpp:fpp /opt/fpp
 
 # -----------------------------
-# Copy HA run script
+# Copy HA-friendly run script
 # -----------------------------
-# You must have a local runDocker.sh in ./Docker/runDocker.sh
-COPY runDocker.sh /opt/fpp/Docker/runDocker.sh
+COPY Docker/runDocker.sh /opt/fpp/Docker/runDocker.sh
 RUN chmod +x /opt/fpp/Docker/runDocker.sh
+
+# -----------------------------
+# Copy SD installer script
+# -----------------------------
+COPY SD/FPP_Install.sh /opt/fpp/SD/FPP_Install.sh
+RUN chmod +x /opt/fpp/SD/FPP_Install.sh
 
 # -----------------------------
 # Non-interactive FPP install
 # -----------------------------
-# Skip apt/vlc since already installed
 USER fpp
 RUN yes | /opt/fpp/SD/FPP_Install.sh --skip-apt-install --skip-vlc --branch master
 
 # -----------------------------
-# Fix ownership again
+# Fix ownership (double-check)
 # -----------------------------
 USER root
 RUN chown -R fpp:fpp /opt/fpp /home/fpp /config/fpp
 
 # -----------------------------
-# FPP Volumes
+# Persistent volume for HA
 # -----------------------------
 VOLUME /config/fpp
 
