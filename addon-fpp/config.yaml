@@ -4,8 +4,7 @@ version: "master"
 slug: "addon-fpp"
 url: "https://github.com/jessica12ryan/homesync-addons"
 
-build: .
-#image: "falconchristmas/fpp"
+image: "falconchristmas/fpp"
 
 arch:
   - amd64
@@ -15,7 +14,23 @@ arch:
 startup: "services"
 boot: "auto"
 
-host_network: true
+ports:
+  80: 80
+  4048/udp: 4048
+  5568/udp: 5568
+  32320/udp: 32320
+  32322: 32322
+  9000: 9000
+  
+ports_description:
+    80: "HTTP",
+    4048/udp: "DDP",
+    5568/udp: "e1.31",
+    32320/udp: "MultiSync",
+    32322: "FPPD/HTTP",
+    9000: "Other"
+
+host_network: false
 host_ipc: true
 
 full_access: true
