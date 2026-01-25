@@ -35,7 +35,7 @@ RUN git clone --recurse-submodules https://github.com/FalconChristmas/fpp.git /o
     git checkout master
 
 # Copy HA-friendly runDocker.sh
-COPY Docker/runDocker.sh /opt/fpp/Docker/runDocker.sh
+COPY runDocker.sh /opt/fpp/Docker/runDocker.sh
 RUN chmod +x /opt/fpp/Docker/runDocker.sh
 
 # Initialize FPP directories (runs as fpp user)
