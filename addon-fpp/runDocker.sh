@@ -1,43 +1,33 @@
-#!/bin/bash
-#
-# HA-friendly FPP Docker entrypoint
-# Runs as fpp user, persistent, no sudo
-#
+# -----------------------------------
+# -- FPP Add-on for Home Assistant --
+# -----------------------------------
+# ---------- runDocker.sh -----------
 
-set -e
+#!/bin/bash
+# HA-friendly FPP entrypoint
+# ---------------------------------
 
 FPP_DIR="/opt/fpp"
 CONFIG_DIR="/home/fpp/media"
-PHPVER="8.4"
 
-# Ensure persistent directories exist and are owned by fpp
-mkdir -p "$CONFIG_DIR" "$CONFIG_DIR/logs" "$CONFIG_DIR/tmp"
-chown -R fpp:fpp "$CONFIG_DIR"
+echo "Starting FPP..."
 
-# Fix PHP-FPM log permissions
-PHP_LOG="/var/log/php${PHPVER}-fpm.log"
-mkdir -p "$(dirname "$PHP_LOG")"
-touch "$PHP_LOG"
-chown fpp:fpp "$PHP_LOG"
+# Ensure persistent directories exist
+mkdir -p "$CONFIG_DIR"
 
-# Configure Apache
-APACHE_CONF="/etc/apache2/apache2.conf"
-if ! grep -q "^ServerName" "$APACHE_CONF"; then
-    echo "ServerName localhost" >> "$APACHE_CONF"
+# Build FPP init if missing
+if [ ! -f "$FPP_DIR/src/fppinit" ]; then
+    echo "fppinit missing, attempting build..."
+    cd "$FPP_DIR/build" || mkdir -p "$FPP_DIR/build" && cd "$FPP_DIR/build"
+    cmake .. && make -j$(nproc)
 fi
 
-# Make sure Apache can write logs
-mkdir -p /var/log/apache2
-chown -R fpp:fpp /var/log/apache2
+# Run FPP init
+if [ -f "$FPP_DIR/src/fppinit" ]; then
+    "$FPP_DIR/src/fppinit" start
+else
+    echo "ERROR: fppinit not found!"
+fi
 
-# Start PHP-FPM
-php-fpm${PHPVER} -F -R &
-
-# Start Apache in foreground
-apache2 -DFOREGROUND &
-
-# Initialize FPP directories (fppinit)
-$FPP_DIR/src/fppinit start
-
-# Keep container alive with FPP daemon
-$FPP_DIR/src/fppd -c "$CONFIG_DIR/fppd.cfg" -p "$CONFIG_DIR/fppd.pid"
+# Keep container alive
+tail -f /dev/null
