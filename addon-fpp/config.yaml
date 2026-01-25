@@ -17,6 +17,7 @@ boot: "auto"
 ports:
   80/tcp: 80
   80/udp: 80
+  22/tcp: 4200
   4048/udp: 4048
   5568/udp: 5568
   32320/udp: 32320
@@ -28,6 +29,7 @@ ports:
 ports_description:
     80/tcp: "HTTP"
     80/udp: "HTTP"
+    22/tcp: "SSH Port"
     4048/udp: "DDP"
     5568/udp: "e1.31"
     32320/udp: "MultiSync"
