@@ -1,13 +1,43 @@
 #!/bin/bash
-if [ ! -f /opt/fpp/src/fppinit ]; then
-    cd /opt/fpp/src
-    CPUS=$(/opt/fpp/scripts/functions ComputeMakeParallelism)
-    make -j ${CPUS}
+#
+# HA-friendly FPP Docker entrypoint
+# Runs as fpp user, persistent, no sudo
+#
+
+set -e
+
+FPP_DIR="/opt/fpp"
+CONFIG_DIR="/home/fpp/media"
+PHPVER="8.4"
+
+# Ensure persistent directories exist and are owned by fpp
+mkdir -p "$CONFIG_DIR" "$CONFIG_DIR/logs" "$CONFIG_DIR/tmp"
+chown -R fpp:fpp "$CONFIG_DIR"
+
+# Fix PHP-FPM log permissions
+PHP_LOG="/var/log/php${PHPVER}-fpm.log"
+mkdir -p "$(dirname "$PHP_LOG")"
+touch "$PHP_LOG"
+chown fpp:fpp "$PHP_LOG"
+
+# Configure Apache
+APACHE_CONF="/etc/apache2/apache2.conf"
+if ! grep -q "^ServerName" "$APACHE_CONF"; then
+    echo "ServerName localhost" >> "$APACHE_CONF"
 fi
 
-/opt/fpp/src/fppinit start
-/opt/fpp/scripts/fppd_start
+# Make sure Apache can write logs
+mkdir -p /var/log/apache2
+chown -R fpp:fpp /var/log/apache2
 
-mkdir /run/php
-/usr/sbin/php-fpm8.2 --fpm-config /etc/php/8.2/fpm/php-fpm.conf
-/usr/sbin/apache2ctl -D FOREGROUND
+# Start PHP-FPM
+php-fpm${PHPVER} -F -R &
+
+# Start Apache in foreground
+apache2 -DFOREGROUND &
+
+# Initialize FPP directories (fppinit)
+$FPP_DIR/src/fppinit start
+
+# Keep container alive with FPP daemon
+$FPP_DIR/src/fppd -c "$CONFIG_DIR/fppd.cfg" -p "$CONFIG_DIR/fppd.pid"
