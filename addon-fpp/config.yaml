@@ -14,31 +14,7 @@ arch:
 startup: "services"
 boot: "auto"
 
-ports:
-  80/tcp: 80
-  80/udp: 80
-  22/tcp: 22
-  4048/udp: 4048
-  5568/udp: 5568
-  32320/udp: 32320
-  32322/tcp: 32322
-  32322/udp: 32322
-  9000/tcp: 9000
-  9000/udp: 9000
-  
-ports_description:
-    80/tcp: "HTTP"
-    80/udp: "HTTP"
-    22/tcp: "SSH Port"
-    4048/udp: "DDP"
-    5568/udp: "e1.31"
-    32320/udp: "MultiSync"
-    32322/tcp: "FPPD/HTTP"
-    32322/udp: "FPPD/HTTP"
-    9000/tcp: "Other"
-    9000/udp: "Other"
-
-host_network: false
+host_network: true
 host_ipc: true
 
 full_access: true
